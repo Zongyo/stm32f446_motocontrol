@@ -1,0 +1,700 @@
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"pid.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.pid_inital,"ax",%progbits
+  20              		.align	1
+  21              		.global	pid_inital
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	pid_inital:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "Core/Src/pid.c"
+   1:Core/Src/pid.c **** #include "../Inc/pid.h"
+   2:Core/Src/pid.c **** 
+   3:Core/Src/pid.c **** int pid_inital (pid_t* pid , float p_gain ,float i_gain ,float d_gain,
+   4:Core/Src/pid.c ****                 para_type type,float saturate, float error){
+  30              		.loc 1 4 60 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+   5:Core/Src/pid.c ****     if (pid->type == para_is_float){
+  35              		.loc 1 5 5 view .LVU1
+  36              		.loc 1 5 12 is_stmt 0 view .LVU2
+  37 0000 90F82030 		ldrb	r3, [r0, #32]	@ zero_extendqisi2
+  38              		.loc 1 5 8 view .LVU3
+  39 0004 1BB3     		cbz	r3, .L9
+   6:Core/Src/pid.c ****         pid->para.dec.p_gain = p_gain;
+   7:Core/Src/pid.c ****         pid->para.dec.i_gain = i_gain;
+   8:Core/Src/pid.c ****         pid->para.dec.d_gain = d_gain;
+   9:Core/Src/pid.c ****         pid->para.dec.err_sum = 0;
+  10:Core/Src/pid.c ****         pid->para.dec.last_err = error;
+  11:Core/Src/pid.c ****         if (saturate == 0)
+  12:Core/Src/pid.c ****             pid->para.integer.saturation = INFINITY;
+  13:Core/Src/pid.c ****         else
+  14:Core/Src/pid.c ****             pid->para.dec.saturation = saturate;
+  15:Core/Src/pid.c ****         return 0;
+  16:Core/Src/pid.c ****     }
+  17:Core/Src/pid.c ****     else if(pid->type == para_is_int){
+  40              		.loc 1 17 10 is_stmt 1 view .LVU4
+  41              		.loc 1 17 12 is_stmt 0 view .LVU5
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 2
+
+
+  42 0006 012B     		cmp	r3, #1
+  43 0008 3DD1     		bne	.L8
+  18:Core/Src/pid.c ****         pid->para.integer.p_gain=(uint32_t) p_gain * (1<<16);
+  44              		.loc 1 18 9 is_stmt 1 view .LVU6
+  45              		.loc 1 18 34 is_stmt 0 view .LVU7
+  46 000a BCEEC00A 		vcvt.u32.f32	s0, s0
+  47              	.LVL1:
+  48              		.loc 1 18 52 view .LVU8
+  49 000e 10EE103A 		vmov	r3, s0	@ int
+  50 0012 1B04     		lsls	r3, r3, #16
+  51              		.loc 1 18 33 view .LVU9
+  52 0014 0360     		str	r3, [r0]
+  19:Core/Src/pid.c ****         pid->para.integer.i_gain=(uint32_t) i_gain * (1<<16);
+  53              		.loc 1 19 9 is_stmt 1 view .LVU10
+  54              		.loc 1 19 34 is_stmt 0 view .LVU11
+  55 0016 FCEEE00A 		vcvt.u32.f32	s1, s1
+  56              	.LVL2:
+  57              		.loc 1 19 52 view .LVU12
+  58 001a 10EE903A 		vmov	r3, s1	@ int
+  59 001e 1B04     		lsls	r3, r3, #16
+  60              		.loc 1 19 33 view .LVU13
+  61 0020 4360     		str	r3, [r0, #4]
+  20:Core/Src/pid.c ****         pid->para.integer.d_gain=(uint32_t) d_gain * (1<<16);
+  62              		.loc 1 20 9 is_stmt 1 view .LVU14
+  63              		.loc 1 20 34 is_stmt 0 view .LVU15
+  64 0022 BCEEC11A 		vcvt.u32.f32	s2, s2
+  65              	.LVL3:
+  66              		.loc 1 20 52 view .LVU16
+  67 0026 11EE103A 		vmov	r3, s2	@ int
+  68 002a 1B04     		lsls	r3, r3, #16
+  69              		.loc 1 20 33 view .LVU17
+  70 002c 8360     		str	r3, [r0, #8]
+  21:Core/Src/pid.c ****         pid->para.integer.err_sum = 0;
+  71              		.loc 1 21 9 is_stmt 1 view .LVU18
+  72              		.loc 1 21 35 is_stmt 0 view .LVU19
+  73 002e 0023     		movs	r3, #0
+  74 0030 C360     		str	r3, [r0, #12]
+  22:Core/Src/pid.c ****         pid->para.integer.last_err = (int32_t)error;
+  75              		.loc 1 22 9 is_stmt 1 view .LVU20
+  76              		.loc 1 22 38 is_stmt 0 view .LVU21
+  77 0032 BDEEC22A 		vcvt.s32.f32	s4, s4
+  78              	.LVL4:
+  79              		.loc 1 22 36 view .LVU22
+  80 0036 80ED042A 		vstr.32	s4, [r0, #16]	@ int
+  23:Core/Src/pid.c ****         if (saturate == 0)
+  81              		.loc 1 23 9 is_stmt 1 view .LVU23
+  82              		.loc 1 23 12 is_stmt 0 view .LVU24
+  83 003a F5EE401A 		vcmp.f32	s3, #0
+  84 003e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  85 0042 1BD1     		bne	.L6
+  24:Core/Src/pid.c ****             pid->para.integer.saturation = 0x20000000;
+  86              		.loc 1 24 13 is_stmt 1 view .LVU25
+  87              		.loc 1 24 42 is_stmt 0 view .LVU26
+  88 0044 4FF00053 		mov	r3, #536870912
+  89 0048 4361     		str	r3, [r0, #20]
+  90              	.LVL5:
+  91              	.L7:
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 3
+
+
+  25:Core/Src/pid.c ****         else
+  26:Core/Src/pid.c ****             pid->para.integer.saturation = (int32_t)saturate;
+  27:Core/Src/pid.c ****         return 0;
+  92              		.loc 1 27 9 is_stmt 1 view .LVU27
+  93              		.loc 1 27 16 is_stmt 0 view .LVU28
+  94 004a 0020     		movs	r0, #0
+  95              	.LVL6:
+  96              		.loc 1 27 16 view .LVU29
+  97 004c 7047     		bx	lr
+  98              	.LVL7:
+  99              	.L9:
+   6:Core/Src/pid.c ****         pid->para.dec.i_gain = i_gain;
+ 100              		.loc 1 6 9 is_stmt 1 view .LVU30
+   6:Core/Src/pid.c ****         pid->para.dec.i_gain = i_gain;
+ 101              		.loc 1 6 30 is_stmt 0 view .LVU31
+ 102 004e 80ED000A 		vstr.32	s0, [r0]
+   7:Core/Src/pid.c ****         pid->para.dec.d_gain = d_gain;
+ 103              		.loc 1 7 9 is_stmt 1 view .LVU32
+   7:Core/Src/pid.c ****         pid->para.dec.d_gain = d_gain;
+ 104              		.loc 1 7 30 is_stmt 0 view .LVU33
+ 105 0052 C0ED010A 		vstr.32	s1, [r0, #4]
+   8:Core/Src/pid.c ****         pid->para.dec.err_sum = 0;
+ 106              		.loc 1 8 9 is_stmt 1 view .LVU34
+   8:Core/Src/pid.c ****         pid->para.dec.err_sum = 0;
+ 107              		.loc 1 8 30 is_stmt 0 view .LVU35
+ 108 0056 80ED021A 		vstr.32	s2, [r0, #8]
+   9:Core/Src/pid.c ****         pid->para.dec.last_err = error;
+ 109              		.loc 1 9 9 is_stmt 1 view .LVU36
+   9:Core/Src/pid.c ****         pid->para.dec.last_err = error;
+ 110              		.loc 1 9 31 is_stmt 0 view .LVU37
+ 111 005a 0023     		movs	r3, #0
+ 112 005c C360     		str	r3, [r0, #12]	@ float
+  10:Core/Src/pid.c ****         if (saturate == 0)
+ 113              		.loc 1 10 9 is_stmt 1 view .LVU38
+  10:Core/Src/pid.c ****         if (saturate == 0)
+ 114              		.loc 1 10 32 is_stmt 0 view .LVU39
+ 115 005e 80ED042A 		vstr.32	s4, [r0, #16]
+  11:Core/Src/pid.c ****             pid->para.integer.saturation = INFINITY;
+ 116              		.loc 1 11 9 is_stmt 1 view .LVU40
+  11:Core/Src/pid.c ****             pid->para.integer.saturation = INFINITY;
+ 117              		.loc 1 11 12 is_stmt 0 view .LVU41
+ 118 0062 F5EE401A 		vcmp.f32	s3, #0
+ 119 0066 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 120 006a 04D1     		bne	.L3
+  12:Core/Src/pid.c ****         else
+ 121              		.loc 1 12 13 is_stmt 1 view .LVU42
+  12:Core/Src/pid.c ****         else
+ 122              		.loc 1 12 42 is_stmt 0 view .LVU43
+ 123 006c 6FF00043 		mvn	r3, #-2147483648
+ 124 0070 4361     		str	r3, [r0, #20]
+ 125              	.L4:
+  15:Core/Src/pid.c ****     }
+ 126              		.loc 1 15 9 is_stmt 1 view .LVU44
+  15:Core/Src/pid.c ****     }
+ 127              		.loc 1 15 16 is_stmt 0 view .LVU45
+ 128 0072 0020     		movs	r0, #0
+ 129              	.LVL8:
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 4
+
+
+  15:Core/Src/pid.c ****     }
+ 130              		.loc 1 15 16 view .LVU46
+ 131 0074 7047     		bx	lr
+ 132              	.LVL9:
+ 133              	.L3:
+  14:Core/Src/pid.c ****         return 0;
+ 134              		.loc 1 14 13 is_stmt 1 view .LVU47
+  14:Core/Src/pid.c ****         return 0;
+ 135              		.loc 1 14 38 is_stmt 0 view .LVU48
+ 136 0076 C0ED051A 		vstr.32	s3, [r0, #20]
+ 137 007a FAE7     		b	.L4
+ 138              	.LVL10:
+ 139              	.L6:
+  26:Core/Src/pid.c ****         return 0;
+ 140              		.loc 1 26 13 is_stmt 1 view .LVU49
+  26:Core/Src/pid.c ****         return 0;
+ 141              		.loc 1 26 44 is_stmt 0 view .LVU50
+ 142 007c FDEEE11A 		vcvt.s32.f32	s3, s3
+ 143              	.LVL11:
+  26:Core/Src/pid.c ****         return 0;
+ 144              		.loc 1 26 42 view .LVU51
+ 145 0080 C0ED051A 		vstr.32	s3, [r0, #20]	@ int
+ 146 0084 E1E7     		b	.L7
+ 147              	.LVL12:
+ 148              	.L8:
+  28:Core/Src/pid.c ****     }
+  29:Core/Src/pid.c ****     else{
+  30:Core/Src/pid.c ****         return -1;
+ 149              		.loc 1 30 16 view .LVU52
+ 150 0086 4FF0FF30 		mov	r0, #-1
+ 151              	.LVL13:
+  31:Core/Src/pid.c ****     }
+  32:Core/Src/pid.c **** }
+ 152              		.loc 1 32 1 view .LVU53
+ 153 008a 7047     		bx	lr
+ 154              		.cfi_endproc
+ 155              	.LFE0:
+ 157              		.section	.text.pid_control,"ax",%progbits
+ 158              		.align	1
+ 159              		.global	pid_control
+ 160              		.syntax unified
+ 161              		.thumb
+ 162              		.thumb_func
+ 164              	pid_control:
+ 165              	.LVL14:
+ 166              	.LFB1:
+  33:Core/Src/pid.c **** 
+  34:Core/Src/pid.c **** int pid_control( pid_t* pid){
+ 167              		.loc 1 34 29 is_stmt 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171              		@ link register save eliminated.
+  35:Core/Src/pid.c ****     switch (pid->type){
+ 172              		.loc 1 35 5 view .LVU55
+ 173              		.loc 1 35 16 is_stmt 0 view .LVU56
+ 174 0000 90F82030 		ldrb	r3, [r0, #32]	@ zero_extendqisi2
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 5
+
+
+ 175              		.loc 1 35 5 view .LVU57
+ 176 0004 23B1     		cbz	r3, .L11
+ 177 0006 012B     		cmp	r3, #1
+ 178 0008 51D0     		beq	.L12
+ 179 000a 4FF0FF30 		mov	r0, #-1
+ 180              	.LVL15:
+ 181              		.loc 1 35 5 view .LVU58
+ 182 000e 7047     		bx	lr
+ 183              	.LVL16:
+ 184              	.L11:
+ 185              	.LBB2:
+  36:Core/Src/pid.c ****         case para_is_float:{
+  37:Core/Src/pid.c ****             float sum = 0;
+ 186              		.loc 1 37 13 is_stmt 1 view .LVU59
+  38:Core/Src/pid.c ****             //避免誤差積分數值太大
+  39:Core/Src/pid.c ****             if ( pid->state == is_saturate && (pid->para.integer.err_sum ^ pid->para.integer.error)
+ 187              		.loc 1 39 13 view .LVU60
+  40:Core/Src/pid.c ****                 pid->para.dec.err_sum += pid->para.dec.error;
+  41:Core/Src/pid.c ****             }
+  42:Core/Src/pid.c ****             else if(pid->state == non_saturate){
+ 188              		.loc 1 42 18 view .LVU61
+ 189              		.loc 1 42 24 is_stmt 0 view .LVU62
+ 190 0010 90F82130 		ldrb	r3, [r0, #33]	@ zero_extendqisi2
+ 191              		.loc 1 42 20 view .LVU63
+ 192 0014 3BB9     		cbnz	r3, .L14
+  43:Core/Src/pid.c ****                  pid->para.dec.err_sum += pid->para.dec.error;
+ 193              		.loc 1 43 18 is_stmt 1 view .LVU64
+ 194              		.loc 1 43 56 is_stmt 0 view .LVU65
+ 195 0016 90ED067A 		vldr.32	s14, [r0, #24]
+ 196              		.loc 1 43 40 view .LVU66
+ 197 001a D0ED037A 		vldr.32	s15, [r0, #12]
+ 198 001e 77EE877A 		vadd.f32	s15, s15, s14
+ 199 0022 C0ED037A 		vstr.32	s15, [r0, #12]
+ 200              	.L14:
+  44:Core/Src/pid.c ****             }
+  45:Core/Src/pid.c **** 
+  46:Core/Src/pid.c ****             sum = pid->para.dec.error * pid->para.dec.p_gain;
+ 201              		.loc 1 46 13 is_stmt 1 view .LVU67
+ 202              		.loc 1 46 32 is_stmt 0 view .LVU68
+ 203 0026 90ED067A 		vldr.32	s14, [r0, #24]
+ 204              		.loc 1 46 54 view .LVU69
+ 205 002a D0ED007A 		vldr.32	s15, [r0]
+ 206              		.loc 1 46 17 view .LVU70
+ 207 002e 67EE276A 		vmul.f32	s13, s14, s15
+ 208              	.LVL17:
+  47:Core/Src/pid.c ****             sum = sum + pid->para.dec.err_sum * pid->para.dec.i_gain;
+ 209              		.loc 1 47 13 is_stmt 1 view .LVU71
+ 210              		.loc 1 47 38 is_stmt 0 view .LVU72
+ 211 0032 D0ED037A 		vldr.32	s15, [r0, #12]
+ 212              		.loc 1 47 62 view .LVU73
+ 213 0036 90ED016A 		vldr.32	s12, [r0, #4]
+ 214              		.loc 1 47 47 view .LVU74
+ 215 003a 67EE867A 		vmul.f32	s15, s15, s12
+ 216              		.loc 1 47 17 view .LVU75
+ 217 003e 77EEA67A 		vadd.f32	s15, s15, s13
+ 218              	.LVL18:
+  48:Core/Src/pid.c ****             //有需要微分器再執行
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 6
+
+
+  49:Core/Src/pid.c ****             if (pid->para.dec.d_gain != 0)
+ 219              		.loc 1 49 13 is_stmt 1 view .LVU76
+ 220              		.loc 1 49 30 is_stmt 0 view .LVU77
+ 221 0042 D0ED026A 		vldr.32	s13, [r0, #8]
+ 222              		.loc 1 49 16 view .LVU78
+ 223 0046 F5EE406A 		vcmp.f32	s13, #0
+ 224 004a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 225 004e 0FD0     		beq	.L15
+  50:Core/Src/pid.c ****             {
+  51:Core/Src/pid.c ****                 sum = sum + (pid->para.dec.error - pid->para.dec.last_err) * pid->para.dec.d_gain;
+ 226              		.loc 1 51 17 is_stmt 1 view .LVU79
+ 227              		.loc 1 51 65 is_stmt 0 view .LVU80
+ 228 0050 90ED046A 		vldr.32	s12, [r0, #16]
+ 229              		.loc 1 51 50 view .LVU81
+ 230 0054 77EE465A 		vsub.f32	s11, s14, s12
+ 231              		.loc 1 51 76 view .LVU82
+ 232 0058 66EEA56A 		vmul.f32	s13, s13, s11
+ 233              		.loc 1 51 21 view .LVU83
+ 234 005c 77EEA67A 		vadd.f32	s15, s15, s13
+ 235              	.LVL19:
+  52:Core/Src/pid.c ****                 pid->para.dec.last_err = (pid->para.dec.last_err + pid->para.dec.error)/2 ; //0.5 +
+ 236              		.loc 1 52 17 is_stmt 1 view .LVU84
+ 237              		.loc 1 52 66 is_stmt 0 view .LVU85
+ 238 0060 37EE067A 		vadd.f32	s14, s14, s12
+ 239              		.loc 1 52 88 view .LVU86
+ 240 0064 F6EE006A 		vmov.f32	s13, #5.0e-1
+ 241 0068 27EE267A 		vmul.f32	s14, s14, s13
+ 242              		.loc 1 52 40 view .LVU87
+ 243 006c 80ED047A 		vstr.32	s14, [r0, #16]
+ 244              	.L15:
+  53:Core/Src/pid.c ****             }
+  54:Core/Src/pid.c **** 
+  55:Core/Src/pid.c ****             //輸出飽和上限
+  56:Core/Src/pid.c ****             if (sum > pid->para.dec.saturation){          //輸出正飽和
+ 245              		.loc 1 56 13 is_stmt 1 view .LVU88
+ 246              		.loc 1 56 36 is_stmt 0 view .LVU89
+ 247 0070 90ED057A 		vldr.32	s14, [r0, #20]
+ 248              		.loc 1 56 16 view .LVU90
+ 249 0074 B4EEE77A 		vcmpe.f32	s14, s15
+ 250 0078 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 251 007c 06D5     		bpl	.L28
+  57:Core/Src/pid.c ****                 sum = pid->para.dec.saturation;
+ 252              		.loc 1 57 17 is_stmt 1 view .LVU91
+ 253              	.LVL20:
+  58:Core/Src/pid.c ****                 pid->state = is_saturate;
+ 254              		.loc 1 58 17 view .LVU92
+ 255              		.loc 1 58 28 is_stmt 0 view .LVU93
+ 256 007e 0123     		movs	r3, #1
+ 257 0080 80F82130 		strb	r3, [r0, #33]
+ 258              	.L18:
+  59:Core/Src/pid.c ****             }
+  60:Core/Src/pid.c ****             else if(sum < -pid->para.dec.saturation){   //輸出負飽和
+  61:Core/Src/pid.c ****                 sum = -pid->para.dec.saturation;
+  62:Core/Src/pid.c ****                 pid->state = is_saturate;
+  63:Core/Src/pid.c ****             }
+  64:Core/Src/pid.c ****             else{
+  65:Core/Src/pid.c ****                 pid->state=non_saturate;
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 7
+
+
+  66:Core/Src/pid.c ****             }
+  67:Core/Src/pid.c ****             
+  68:Core/Src/pid.c ****             pid->para.dec.output = sum;
+ 259              		.loc 1 68 13 is_stmt 1 view .LVU94
+ 260              		.loc 1 68 34 is_stmt 0 view .LVU95
+ 261 0084 80ED077A 		vstr.32	s14, [r0, #28]
+  69:Core/Src/pid.c ****             return 0;
+ 262              		.loc 1 69 13 is_stmt 1 view .LVU96
+ 263              		.loc 1 69 20 is_stmt 0 view .LVU97
+ 264 0088 0020     		movs	r0, #0
+ 265              	.LVL21:
+ 266              		.loc 1 69 20 view .LVU98
+ 267              	.LBE2:
+  70:Core/Src/pid.c ****             break;
+  71:Core/Src/pid.c ****         }
+  72:Core/Src/pid.c ****         //trade off:做floating的乘法可能會比做int64的乘法快，要做優化可能需要
+  73:Core/Src/pid.c ****         case para_is_int:{
+  74:Core/Src/pid.c ****             int64_t sum = 0;
+  75:Core/Src/pid.c **** 
+  76:Core/Src/pid.c ****             if ( pid->state == is_saturate && (pid->para.integer.err_sum ^ pid->para.integer.error)
+  77:Core/Src/pid.c ****                 pid->para.integer.err_sum += pid->para.integer.error;
+  78:Core/Src/pid.c ****             }
+  79:Core/Src/pid.c ****             else if(pid->state == non_saturate){
+  80:Core/Src/pid.c ****                  pid->para.integer.err_sum += pid->para.integer.error;
+  81:Core/Src/pid.c ****             }
+  82:Core/Src/pid.c **** 
+  83:Core/Src/pid.c ****             sum = (pid->para.integer.error * pid->para.integer.p_gain);
+  84:Core/Src/pid.c ****             sum = sum + (pid->para.integer.err_sum * pid->para.integer.i_gain );
+  85:Core/Src/pid.c ****             if (pid->para.integer.d_gain != 0)
+  86:Core/Src/pid.c ****             {
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+  88:Core/Src/pid.c ****                 pid->para.integer.last_err = (pid->para.integer.last_err >> 1) + (pid->para.integer
+  89:Core/Src/pid.c ****             }
+  90:Core/Src/pid.c ****             sum = sum >> 16;
+  91:Core/Src/pid.c ****             //檢查是否輸出飽和
+  92:Core/Src/pid.c ****             if (sum>pid->para.integer.saturation){
+  93:Core/Src/pid.c ****                 sum = pid->para.integer.saturation;
+  94:Core/Src/pid.c ****                 pid->state = is_saturate;
+  95:Core/Src/pid.c ****             }
+  96:Core/Src/pid.c ****             else if(sum<-pid->para.integer.saturation){
+  97:Core/Src/pid.c ****                 sum = -pid->para.integer.saturation;
+  98:Core/Src/pid.c ****                 pid->state = is_saturate;
+  99:Core/Src/pid.c ****             }
+ 100:Core/Src/pid.c ****             else{
+ 101:Core/Src/pid.c ****                 pid->state = non_saturate;
+ 102:Core/Src/pid.c ****             }
+ 103:Core/Src/pid.c ****             
+ 104:Core/Src/pid.c ****             pid->para.integer.output = sum;
+ 105:Core/Src/pid.c ****             return 0;
+ 106:Core/Src/pid.c ****             break;
+ 107:Core/Src/pid.c ****         }
+ 108:Core/Src/pid.c ****         default :{
+ 109:Core/Src/pid.c ****             return -1;
+ 110:Core/Src/pid.c ****             break;
+ 111:Core/Src/pid.c ****         }
+ 112:Core/Src/pid.c ****     }
+ 113:Core/Src/pid.c **** }...
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 8
+
+
+ 268              		.loc 1 113 1 view .LVU99
+ 269 008a 7047     		bx	lr
+ 270              	.LVL22:
+ 271              	.L28:
+ 272              	.LBB3:
+  60:Core/Src/pid.c ****             else if(sum < -pid->para.dec.saturation){   //輸出負飽和
+ 273              		.loc 1 60 18 is_stmt 1 view .LVU100
+  60:Core/Src/pid.c ****             else if(sum < -pid->para.dec.saturation){   //輸出負飽和
+ 274              		.loc 1 60 27 is_stmt 0 view .LVU101
+ 275 008c B1EE477A 		vneg.f32	s14, s14
+  60:Core/Src/pid.c ****             else if(sum < -pid->para.dec.saturation){   //輸出負飽和
+ 276              		.loc 1 60 20 view .LVU102
+ 277 0090 B4EEE77A 		vcmpe.f32	s14, s15
+ 278 0094 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 279 0098 03DD     		ble	.L29
+  61:Core/Src/pid.c ****                 sum = -pid->para.dec.saturation;
+ 280              		.loc 1 61 17 is_stmt 1 view .LVU103
+ 281              	.LVL23:
+  62:Core/Src/pid.c ****                 pid->state = is_saturate;
+ 282              		.loc 1 62 17 view .LVU104
+  62:Core/Src/pid.c ****                 pid->state = is_saturate;
+ 283              		.loc 1 62 28 is_stmt 0 view .LVU105
+ 284 009a 0123     		movs	r3, #1
+ 285 009c 80F82130 		strb	r3, [r0, #33]
+ 286 00a0 F0E7     		b	.L18
+ 287              	.LVL24:
+ 288              	.L29:
+  65:Core/Src/pid.c ****                 pid->state=non_saturate;
+ 289              		.loc 1 65 17 is_stmt 1 view .LVU106
+  65:Core/Src/pid.c ****                 pid->state=non_saturate;
+ 290              		.loc 1 65 27 is_stmt 0 view .LVU107
+ 291 00a2 0023     		movs	r3, #0
+ 292 00a4 80F82130 		strb	r3, [r0, #33]
+ 293 00a8 B0EE677A 		vmov.f32	s14, s15
+ 294 00ac EAE7     		b	.L18
+ 295              	.LVL25:
+ 296              	.L12:
+  65:Core/Src/pid.c ****                 pid->state=non_saturate;
+ 297              		.loc 1 65 27 view .LVU108
+ 298              	.LBE3:
+  34:Core/Src/pid.c **** int pid_control( pid_t* pid){
+ 299              		.loc 1 34 29 view .LVU109
+ 300 00ae 30B4     		push	{r4, r5}
+ 301              	.LCFI0:
+ 302              		.cfi_def_cfa_offset 8
+ 303              		.cfi_offset 4, -8
+ 304              		.cfi_offset 5, -4
+ 305              	.LBB4:
+  70:Core/Src/pid.c ****             break;
+ 306              		.loc 1 70 13 is_stmt 1 view .LVU110
+ 307              	.LBE4:
+ 308              	.LBB5:
+  74:Core/Src/pid.c ****             int64_t sum = 0;
+ 309              		.loc 1 74 13 view .LVU111
+ 310              	.LVL26:
+  76:Core/Src/pid.c ****             if ( pid->state == is_saturate && (pid->para.integer.err_sum ^ pid->para.integer.error)
+ 311              		.loc 1 76 13 view .LVU112
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 9
+
+
+  79:Core/Src/pid.c ****             else if(pid->state == non_saturate){
+ 312              		.loc 1 79 18 view .LVU113
+  79:Core/Src/pid.c ****             else if(pid->state == non_saturate){
+ 313              		.loc 1 79 24 is_stmt 0 view .LVU114
+ 314 00b0 90F82130 		ldrb	r3, [r0, #33]	@ zero_extendqisi2
+  79:Core/Src/pid.c ****             else if(pid->state == non_saturate){
+ 315              		.loc 1 79 20 view .LVU115
+ 316 00b4 1BB9     		cbnz	r3, .L21
+  80:Core/Src/pid.c ****                  pid->para.integer.err_sum += pid->para.integer.error;
+ 317              		.loc 1 80 18 is_stmt 1 view .LVU116
+  80:Core/Src/pid.c ****                  pid->para.integer.err_sum += pid->para.integer.error;
+ 318              		.loc 1 80 64 is_stmt 0 view .LVU117
+ 319 00b6 8269     		ldr	r2, [r0, #24]
+  80:Core/Src/pid.c ****                  pid->para.integer.err_sum += pid->para.integer.error;
+ 320              		.loc 1 80 44 view .LVU118
+ 321 00b8 C368     		ldr	r3, [r0, #12]
+ 322 00ba 1344     		add	r3, r3, r2
+ 323 00bc C360     		str	r3, [r0, #12]
+ 324              	.L21:
+  83:Core/Src/pid.c ****             sum = (pid->para.integer.error * pid->para.integer.p_gain);
+ 325              		.loc 1 83 13 is_stmt 1 view .LVU119
+  83:Core/Src/pid.c ****             sum = (pid->para.integer.error * pid->para.integer.p_gain);
+ 326              		.loc 1 83 37 is_stmt 0 view .LVU120
+ 327 00be 8469     		ldr	r4, [r0, #24]
+  83:Core/Src/pid.c ****             sum = (pid->para.integer.error * pid->para.integer.p_gain);
+ 328              		.loc 1 83 63 view .LVU121
+ 329 00c0 0368     		ldr	r3, [r0]
+  83:Core/Src/pid.c ****             sum = (pid->para.integer.error * pid->para.integer.p_gain);
+ 330              		.loc 1 83 44 view .LVU122
+ 331 00c2 03FB04F1 		mul	r1, r3, r4
+  83:Core/Src/pid.c ****             sum = (pid->para.integer.error * pid->para.integer.p_gain);
+ 332              		.loc 1 83 17 view .LVU123
+ 333 00c6 0022     		movs	r2, #0
+ 334              	.LVL27:
+  84:Core/Src/pid.c ****             sum = sum + (pid->para.integer.err_sum * pid->para.integer.i_gain );
+ 335              		.loc 1 84 13 is_stmt 1 view .LVU124
+  84:Core/Src/pid.c ****             sum = sum + (pid->para.integer.err_sum * pid->para.integer.i_gain );
+ 336              		.loc 1 84 43 is_stmt 0 view .LVU125
+ 337 00c8 C368     		ldr	r3, [r0, #12]
+  84:Core/Src/pid.c ****             sum = sum + (pid->para.integer.err_sum * pid->para.integer.i_gain );
+ 338              		.loc 1 84 52 view .LVU126
+ 339 00ca 4568     		ldr	r5, [r0, #4]
+ 340 00cc 05FB03F3 		mul	r3, r5, r3
+  84:Core/Src/pid.c ****             sum = sum + (pid->para.integer.err_sum * pid->para.integer.i_gain );
+ 341              		.loc 1 84 17 view .LVU127
+ 342 00d0 5B18     		adds	r3, r3, r1
+ 343 00d2 5241     		adcs	r2, r2, r2
+ 344              	.LVL28:
+  85:Core/Src/pid.c ****             if (pid->para.integer.d_gain != 0)
+ 345              		.loc 1 85 13 is_stmt 1 view .LVU128
+  85:Core/Src/pid.c ****             if (pid->para.integer.d_gain != 0)
+ 346              		.loc 1 85 34 is_stmt 0 view .LVU129
+ 347 00d4 8168     		ldr	r1, [r0, #8]
+  85:Core/Src/pid.c ****             if (pid->para.integer.d_gain != 0)
+ 348              		.loc 1 85 16 view .LVU130
+ 349 00d6 59B1     		cbz	r1, .L22
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 10
+
+
+ 350              		.loc 1 87 17 is_stmt 1 view .LVU131
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+ 351              		.loc 1 87 74 is_stmt 0 view .LVU132
+ 352 00d8 0569     		ldr	r5, [r0, #16]
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+ 353              		.loc 1 87 55 view .LVU133
+ 354 00da A4EB050C 		sub	ip, r4, r5
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+ 355              		.loc 1 87 85 view .LVU134
+ 356 00de 0CFB01F1 		mul	r1, ip, r1
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+ 357              		.loc 1 87 21 view .LVU135
+ 358 00e2 CB18     		adds	r3, r1, r3
+ 359              	.LVL29:
+  87:Core/Src/pid.c ****                 sum = sum + ((pid->para.integer.error - pid->para.integer.last_err) * pid->para.int
+ 360              		.loc 1 87 21 view .LVU136
+ 361 00e4 42F10002 		adc	r2, r2, #0
+ 362              	.LVL30:
+  88:Core/Src/pid.c ****                 pid->para.integer.last_err = (pid->para.integer.last_err >> 1) + (pid->para.integer
+ 363              		.loc 1 88 17 is_stmt 1 view .LVU137
+  88:Core/Src/pid.c ****                 pid->para.integer.last_err = (pid->para.integer.last_err >> 1) + (pid->para.integer
+ 364              		.loc 1 88 107 is_stmt 0 view .LVU138
+ 365 00e8 6410     		asrs	r4, r4, #1
+  88:Core/Src/pid.c ****                 pid->para.integer.last_err = (pid->para.integer.last_err >> 1) + (pid->para.integer
+ 366              		.loc 1 88 80 view .LVU139
+ 367 00ea 04EB5504 		add	r4, r4, r5, lsr #1
+  88:Core/Src/pid.c ****                 pid->para.integer.last_err = (pid->para.integer.last_err >> 1) + (pid->para.integer
+ 368              		.loc 1 88 44 view .LVU140
+ 369 00ee 0461     		str	r4, [r0, #16]
+ 370              	.LVL31:
+ 371              	.L22:
+  90:Core/Src/pid.c ****             sum = sum >> 16;
+ 372              		.loc 1 90 13 is_stmt 1 view .LVU141
+  90:Core/Src/pid.c ****             sum = sum >> 16;
+ 373              		.loc 1 90 17 is_stmt 0 view .LVU142
+ 374 00f0 1B0C     		lsrs	r3, r3, #16
+ 375              	.LVL32:
+  90:Core/Src/pid.c ****             sum = sum >> 16;
+ 376              		.loc 1 90 17 view .LVU143
+ 377 00f2 43EA0243 		orr	r3, r3, r2, lsl #16
+ 378 00f6 1214     		asrs	r2, r2, #16
+ 379              	.LVL33:
+  92:Core/Src/pid.c ****             if (sum>pid->para.integer.saturation){
+ 380              		.loc 1 92 13 is_stmt 1 view .LVU144
+  92:Core/Src/pid.c ****             if (sum>pid->para.integer.saturation){
+ 381              		.loc 1 92 38 is_stmt 0 view .LVU145
+ 382 00f8 4169     		ldr	r1, [r0, #20]
+ 383 00fa 4FEAE17C 		asr	ip, r1, #31
+ 384 00fe 0C46     		mov	r4, r1
+  92:Core/Src/pid.c ****             if (sum>pid->para.integer.saturation){
+ 385              		.loc 1 92 16 view .LVU146
+ 386 0100 9942     		cmp	r1, r3
+ 387 0102 7CF10005 		sbcs	r5, ip, #0
+ 388 0106 06DA     		bge	.L23
+  93:Core/Src/pid.c ****                 sum = pid->para.integer.saturation;
+ 389              		.loc 1 93 17 is_stmt 1 view .LVU147
+ 390              	.LVL34:
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 11
+
+
+  94:Core/Src/pid.c ****                 pid->state = is_saturate;
+ 391              		.loc 1 94 17 view .LVU148
+  94:Core/Src/pid.c ****                 pid->state = is_saturate;
+ 392              		.loc 1 94 28 is_stmt 0 view .LVU149
+ 393 0108 0123     		movs	r3, #1
+ 394 010a 80F82130 		strb	r3, [r0, #33]
+ 395              	.LVL35:
+ 396              	.L24:
+ 104:Core/Src/pid.c ****             pid->para.integer.output = sum;
+ 397              		.loc 1 104 13 is_stmt 1 view .LVU150
+ 104:Core/Src/pid.c ****             pid->para.integer.output = sum;
+ 398              		.loc 1 104 38 is_stmt 0 view .LVU151
+ 399 010e C461     		str	r4, [r0, #28]
+ 105:Core/Src/pid.c ****             return 0;
+ 400              		.loc 1 105 13 is_stmt 1 view .LVU152
+ 105:Core/Src/pid.c ****             return 0;
+ 401              		.loc 1 105 20 is_stmt 0 view .LVU153
+ 402 0110 0020     		movs	r0, #0
+ 403              	.LVL36:
+ 105:Core/Src/pid.c ****             return 0;
+ 404              		.loc 1 105 20 view .LVU154
+ 405              	.LBE5:
+ 110:Core/Src/pid.c ****             break;
+ 406              		.loc 1 110 13 is_stmt 1 view .LVU155
+ 407              		.loc 1 113 1 is_stmt 0 view .LVU156
+ 408 0112 30BC     		pop	{r4, r5}
+ 409              	.LCFI1:
+ 410              		.cfi_remember_state
+ 411              		.cfi_restore 5
+ 412              		.cfi_restore 4
+ 413              		.cfi_def_cfa_offset 0
+ 414              		.loc 1 113 1 view .LVU157
+ 415 0114 7047     		bx	lr
+ 416              	.LVL37:
+ 417              	.L23:
+ 418              	.LCFI2:
+ 419              		.cfi_restore_state
+ 420              	.LBB6:
+  96:Core/Src/pid.c ****             else if(sum<-pid->para.integer.saturation){
+ 421              		.loc 1 96 18 is_stmt 1 view .LVU158
+  96:Core/Src/pid.c ****             else if(sum<-pid->para.integer.saturation){
+ 422              		.loc 1 96 25 is_stmt 0 view .LVU159
+ 423 0116 4942     		rsbs	r1, r1, #0
+ 424 0118 CD17     		asrs	r5, r1, #31
+ 425 011a 0C46     		mov	r4, r1
+  96:Core/Src/pid.c ****             else if(sum<-pid->para.integer.saturation){
+ 426              		.loc 1 96 20 view .LVU160
+ 427 011c 8B42     		cmp	r3, r1
+ 428 011e AA41     		sbcs	r2, r2, r5
+ 429              	.LVL38:
+  96:Core/Src/pid.c ****             else if(sum<-pid->para.integer.saturation){
+ 430              		.loc 1 96 20 view .LVU161
+ 431 0120 03DA     		bge	.L25
+  97:Core/Src/pid.c ****                 sum = -pid->para.integer.saturation;
+ 432              		.loc 1 97 17 is_stmt 1 view .LVU162
+ 433              	.LVL39:
+  98:Core/Src/pid.c ****                 pid->state = is_saturate;
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 12
+
+
+ 434              		.loc 1 98 17 view .LVU163
+  98:Core/Src/pid.c ****                 pid->state = is_saturate;
+ 435              		.loc 1 98 28 is_stmt 0 view .LVU164
+ 436 0122 0123     		movs	r3, #1
+ 437 0124 80F82130 		strb	r3, [r0, #33]
+ 438 0128 F1E7     		b	.L24
+ 439              	.LVL40:
+ 440              	.L25:
+ 101:Core/Src/pid.c ****                 pid->state = non_saturate;
+ 441              		.loc 1 101 17 is_stmt 1 view .LVU165
+ 101:Core/Src/pid.c ****                 pid->state = non_saturate;
+ 442              		.loc 1 101 28 is_stmt 0 view .LVU166
+ 443 012a 0022     		movs	r2, #0
+ 444 012c 80F82120 		strb	r2, [r0, #33]
+  90:Core/Src/pid.c ****             sum = sum >> 16;
+ 445              		.loc 1 90 17 view .LVU167
+ 446 0130 1C46     		mov	r4, r3
+ 447 0132 ECE7     		b	.L24
+ 448              	.LBE6:
+ 449              		.cfi_endproc
+ 450              	.LFE1:
+ 452              		.text
+ 453              	.Letext0:
+ 454              		.file 2 "c:\\users\\zongyo\\documents\\gcc-arm-none-eabi-10.3-2021.10\\arm-none-eabi\\include\\mac
+ 455              		.file 3 "c:\\users\\zongyo\\documents\\gcc-arm-none-eabi-10.3-2021.10\\arm-none-eabi\\include\\sys
+ 456              		.file 4 "Core/Src/../Inc/pid.h"
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pid.c
+C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s:20     .text.pid_inital:00000000 $t
+C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s:26     .text.pid_inital:00000000 pid_inital
+C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s:158    .text.pid_control:00000000 $t
+C:\Users\ZongYo\AppData\Local\Temp\ccIQaAZO.s:164    .text.pid_control:00000000 pid_control
+
+NO UNDEFINED SYMBOLS

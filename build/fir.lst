@@ -1,0 +1,111 @@
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccG39QwP.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"fir.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.avg_fliter16_t,"ax",%progbits
+  20              		.align	1
+  21              		.global	avg_fliter16_t
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	avg_fliter16_t:
+  27              	.LVL0:
+  28              	.LFB3:
+  29              		.file 1 "Core/Src/fir.c"
+   1:Core/Src/fir.c **** #include "../Inc/fir.h"
+   2:Core/Src/fir.c **** 
+   3:Core/Src/fir.c **** uint16_t avg_fliter16_t(uint16_t *buf ,int length){
+  30              		.loc 1 3 51 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+   4:Core/Src/fir.c ****     int32_t total=0;
+  35              		.loc 1 4 5 view .LVU1
+   5:Core/Src/fir.c ****     for (int i = 0; i < length; i++)
+  36              		.loc 1 5 5 view .LVU2
+  37              	.LBB2:
+  38              		.loc 1 5 10 view .LVU3
+  39              		.loc 1 5 14 is_stmt 0 view .LVU4
+  40 0000 0023     		movs	r3, #0
+  41              	.LBE2:
+   4:Core/Src/fir.c ****     int32_t total=0;
+  42              		.loc 1 4 13 view .LVU5
+  43 0002 1A46     		mov	r2, r3
+  44              	.LBB3:
+  45              		.loc 1 5 5 view .LVU6
+  46 0004 03E0     		b	.L2
+  47              	.LVL1:
+  48              	.L3:
+   6:Core/Src/fir.c ****     {
+   7:Core/Src/fir.c ****         total=total + *(buf+i);
+  49              		.loc 1 7 9 is_stmt 1 discriminator 3 view .LVU7
+  50              		.loc 1 7 23 is_stmt 0 discriminator 3 view .LVU8
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccG39QwP.s 			page 2
+
+
+  51 0006 30F813C0 		ldrh	ip, [r0, r3, lsl #1]
+  52              		.loc 1 7 14 discriminator 3 view .LVU9
+  53 000a 6244     		add	r2, r2, ip
+  54              	.LVL2:
+   5:Core/Src/fir.c ****     for (int i = 0; i < length; i++)
+  55              		.loc 1 5 33 is_stmt 1 discriminator 3 view .LVU10
+   5:Core/Src/fir.c ****     for (int i = 0; i < length; i++)
+  56              		.loc 1 5 34 is_stmt 0 discriminator 3 view .LVU11
+  57 000c 0133     		adds	r3, r3, #1
+  58              	.LVL3:
+  59              	.L2:
+   5:Core/Src/fir.c ****     for (int i = 0; i < length; i++)
+  60              		.loc 1 5 21 is_stmt 1 discriminator 1 view .LVU12
+   5:Core/Src/fir.c ****     for (int i = 0; i < length; i++)
+  61              		.loc 1 5 5 is_stmt 0 discriminator 1 view .LVU13
+  62 000e 8B42     		cmp	r3, r1
+  63 0010 F9DB     		blt	.L3
+  64              	.LBE3:
+   8:Core/Src/fir.c ****     }
+   9:Core/Src/fir.c ****     total=total/length;
+  65              		.loc 1 9 5 is_stmt 1 view .LVU14
+  66              		.loc 1 9 10 is_stmt 0 view .LVU15
+  67 0012 92FBF1F0 		sdiv	r0, r2, r1
+  68              	.LVL4:
+  10:Core/Src/fir.c **** 
+  11:Core/Src/fir.c ****     return (uint16_t)total;
+  69              		.loc 1 11 5 is_stmt 1 view .LVU16
+  12:Core/Src/fir.c **** }
+  70              		.loc 1 12 1 is_stmt 0 view .LVU17
+  71 0016 80B2     		uxth	r0, r0
+  72              	.LVL5:
+  73              		.loc 1 12 1 view .LVU18
+  74 0018 7047     		bx	lr
+  75              		.cfi_endproc
+  76              	.LFE3:
+  78              		.text
+  79              	.Letext0:
+  80              		.file 2 "c:\\users\\zongyo\\documents\\gcc-arm-none-eabi-10.3-2021.10\\arm-none-eabi\\include\\mac
+  81              		.file 3 "c:\\users\\zongyo\\documents\\gcc-arm-none-eabi-10.3-2021.10\\arm-none-eabi\\include\\sys
+ARM GAS  C:\Users\ZongYo\AppData\Local\Temp\ccG39QwP.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 fir.c
+C:\Users\ZongYo\AppData\Local\Temp\ccG39QwP.s:20     .text.avg_fliter16_t:00000000 $t
+C:\Users\ZongYo\AppData\Local\Temp\ccG39QwP.s:26     .text.avg_fliter16_t:00000000 avg_fliter16_t
+
+NO UNDEFINED SYMBOLS
